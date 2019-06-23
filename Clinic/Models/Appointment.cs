@@ -13,6 +13,10 @@ namespace Clinic.Models
 
         [Required]
         public int PatientId { get; set; }
+        public AppointmentTypes AppointmentType { get; set; }
+
+        [Required]
+        public int AppointmentTypeId { get; set; }
 
         [Required]
         public DateTime AppointmentDate { get; set; }
