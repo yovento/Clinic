@@ -1,0 +1,47 @@
+﻿
+@model IEnumerable<Clinic.Models.Patient>
+@{
+    ViewBag.Title = "Patients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Patients</h2>
+<p>
+    @Html.ActionLink("New Patient", "New", "Patient", null, new { @class = "btn btn-primary" })
+</p>
+@if (Model.Count() == 0)
+{
+    <p>We don´t have any patients yet.</p>
+}
+else
+{
+    <table class="table table-­‐bordered table-­‐hover">
+        <thead>
+            <tr>
+                <th>Patient</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Appointments</th>
+            </tr>
+        </thead>
+        @foreach (var patient in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(patient.Name, "Edit", "Patient", new { Id = patient.Id }, null)
+                </td>
+                <td>
+                    @patient.Email
+                </td>
+                <td>
+                    @patient.Phone
+                </td>
+                <td>
+                    @Html.ActionLink("Appointments", "Index", "Appointments", new { Id = patient.Id }, null)
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
