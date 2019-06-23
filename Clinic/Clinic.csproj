@@ -207,6 +207,10 @@
     <Compile Include="Migrations\201906231728511_AddEmailToPatient.Designer.cs">
       <DependentUpon>201906231728511_AddEmailToPatient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906231806008_SeedingAppointmentTypes.cs" />
+    <Compile Include="Migrations\201906231806008_SeedingAppointmentTypes.Designer.cs">
+      <DependentUpon>201906231806008_SeedingAppointmentTypes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -303,6 +307,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906231728511_AddEmailToPatient.resx">
       <DependentUpon>201906231728511_AddEmailToPatient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906231806008_SeedingAppointmentTypes.resx">
+      <DependentUpon>201906231806008_SeedingAppointmentTypes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
