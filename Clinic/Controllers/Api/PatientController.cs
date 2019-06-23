@@ -43,16 +43,16 @@ namespace Clinic.Controllers.Api
             _dbContext.SaveChanges();
             PatientDto.Id = Patient.Id;
 
-            return Created(new Uri(Request.RequestUri + "/" + Patient.Id), PatientDto);
+            return Ok(Patient.Id);
         }
 
         [HttpPut]
-        public IHttpActionResult UpdatePatient(int Id, PatientDTO PatientDto)
+        public IHttpActionResult UpdatePatient(PatientDTO PatientDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var PatientInDb = _dbContext.Patients.Single(c => c.Id == Id);
+            var PatientInDb = _dbContext.Patients.Single(c => c.Id == PatientDto.Id);
 
             if (PatientInDb == null)
                 return NotFound();

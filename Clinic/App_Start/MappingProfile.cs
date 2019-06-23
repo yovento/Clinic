@@ -13,6 +13,7 @@ namespace Clinic.App_Start
         public MappingProfile()
         {
             Mapper.CreateMap<Patient, PatientDTO>();
+            Mapper.CreateMap<PatientDTO, Patient>();
         }
     }
 }

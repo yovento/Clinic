@@ -1,0 +1,98 @@
+﻿@model int
+@{
+    ViewBag.Title = "PatientForm";
+}
+
+<h2>Patient Form</h2>
+
+<form id="patientForm">
+    <div class="form-group">
+        <label>
+            Name
+        </label>
+        <input id="name" type="text" required value="" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>
+            Email
+        </label>
+        <input id="email" type="text" required value="" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>
+            Phone
+        </label>
+        <input id="phone" type="text" required value="" class="form-control" />
+    </div>
+
+    <button id="submit" class="btn btn-primary">Save</button>
+</form>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(() => {
+            patientForm.configureUI();
+            patientForm.formLogic.getPatient();
+        });
+
+        let patientForm = {
+            global: {
+                patientId: @Model,
+                patient: {}
+            },
+            configureUI: () => {
+               
+                var validator = $("#patientForm").validate({                    
+                    submitHandler: function () {
+                        patientForm.formLogic.loadPatientObject();
+                        patientForm.services.savePatient();
+                        return false;
+                    }
+                });
+            },
+            formLogic: {
+                loadPatientObject: () => {
+                    patientForm.global.patient.Id = patientForm.global.patientId;
+                    patientForm.global.patient.Name = $("#name").val();
+                    patientForm.global.patient.Email = $("#email").val();
+                    patientForm.global.patient.Phone = $("#phone").val();
+
+                },
+                getPatient: () => {
+                    if (patientForm.global.patientId !== 0)
+                        patientForm.services.getPatient();
+                }
+            },
+            services: {
+                getPatient: () => {
+                    $.ajax({
+                        url: "/api/patient/" + patientForm.global.patientId,
+                        method: "get"
+                    }).done((data) => {
+                        $('#name').val(data.Name);
+                        $('#phone').val(data.Phone);
+                        $('#email').val(data.Email);
+                        });
+                },
+                savePatient: () => {
+                        $.ajax({
+                            url: "/api/patient",
+                            method: patientForm.global.patientId == 0 ? "post" : "put",
+                            data: patientForm.global.patient
+                        }).done((data) => {
+                            patientForm.global.patientId = data;
+                            bootbox.alert("Patient saved succesfully.");
+                            }).fail((data) => {
+                                console.log(data);
+                                bootbox.alert("Something went wrong.");
+                            });
+                }
+            }
+        }
+
+
+    </script>
+}

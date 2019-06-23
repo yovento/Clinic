@@ -18,9 +18,18 @@ namespace Clinic.Controllers
 
         // GET: Patient
         public ActionResult Index()
+        {            
+            return View();
+        }
+
+        public ActionResult New()
         {
-            var patients = _dbContext.Patients.ToList();
-            return View(patients);
+            return View("PatientForm", 0);
+        }
+
+        public ActionResult Edit(int Id)
+        {
+            return View("PatientForm", Id);
         }
     }
 }
