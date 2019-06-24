@@ -31,7 +31,7 @@
 </form>
 
 @section scripts{
-    @Scripts.Render("~/bundles/jqueryval")
+    @*@Scripts.Render("~/bundles/jqueryval")*@
     <script>
         $(document).ready(() => {
             patientForm.configureUI();
@@ -44,14 +44,13 @@
                 patient: {}
             },
             configureUI: () => {
-               
-                var validator = $("#patientForm").validate({                    
-                    submitHandler: function () {
-                        patientForm.formLogic.loadPatientObject();
-                        patientForm.services.savePatient();
-                        return false;
-                    }
-                });
+
+                $("#patientForm").submit((e) => {
+                    e.preventDefault();
+
+                    patientForm.formLogic.loadPatientObject();
+                    patientForm.services.savePatient();
+                });                
             },
             formLogic: {
                 loadPatientObject: () => {

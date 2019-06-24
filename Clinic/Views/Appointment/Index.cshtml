@@ -1,0 +1,92 @@
+﻿@model int
+@{
+    ViewBag.Title = "Appointments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 id="title"></h2>
+<p>
+    @Html.ActionLink("New Appointment", "New/" + Model, "Appointment", null, new { @class = "btn btn-primary" })
+</p>
+<table id="appointments" class="table table-­‐bordered table-­‐hover">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Date</th>            
+            <th>Status</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+</table>
+
+
+@section scripts {
+    <script>
+        let patientId = @Model;
+        $(document).ready(() => {
+            $.ajax({
+                url: "/api/patient/" + patientId,
+                method: "get"
+            }).done((data) => {
+                $('#title').html('Appointments for ' + data.Name);
+            });
+
+            var table = $("#appointments").DataTable({
+                ajax: {
+                    url: "/api/appointment/GetAppointments?PatientId=" + patientId,
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "Type",
+                        render: function (data, type, appointment) {
+                            return "<a href='/appointment/edit/" + appointment.Id + "'>" + appointment.AppointmentType.Name + "</a>";
+                        }
+                    },
+                    {
+                        data: "AppointmentDate",
+                        render: function (data, type, appointment) {
+                            return ('' + appointment.AppointmentDate).replace('T',' ');
+                        }
+                    },
+                    {
+                        data: "IsActiveAppointment",
+                        render: function (data, type, appointment) {
+                            return appointment.IsActiveAppointment == true ? 'Active' : 'Cancelled';
+                        }
+                    },
+                    {
+                        data: "Delete",
+                        render: function (data, type, appointment) {
+                            return "<button class='btn-link js-delete' data-appointment-id='" + appointment.Id + "'>Delete</button>";
+                        }
+                    }
+                ]
+            });
+
+            $("#appointments").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Are you sure you want to delete this appointment?", (result) => {
+                    if (result == true) {
+                        $.ajax({
+                            url: "/api/appointment/" + button.attr("data-appointment-id"),
+                            method: "DELETE",
+                            success: () => {
+                                bootbox.alert("appointment removed succesfully");
+                                button.parents("tr").remove();
+                            },
+                            error: (error) => {
+                                console.log(error);
+                            }
+                        });
+                    }
+
+                });
+
+
+            });
+        });
+    </script>
+}
+

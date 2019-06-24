@@ -14,6 +14,12 @@ namespace Clinic.App_Start
         {
             Mapper.CreateMap<Patient, PatientDTO>();
             Mapper.CreateMap<PatientDTO, Patient>();
+
+            Mapper.CreateMap<Appointment, AppointmentDto>();
+            Mapper.CreateMap<AppointmentDto, Appointment>();
+
+            Mapper.CreateMap<AppointmentTypes, AppointmentTypeDto>();
+            Mapper.CreateMap<AppointmentTypeDto, AppointmentTypes>();
         }
     }
 }
