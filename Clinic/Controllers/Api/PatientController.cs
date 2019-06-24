@@ -7,25 +7,27 @@ using System.Web.Http;
 using Clinic.DTO;
 using Clinic.Models;
 using AutoMapper;
+using Clinic.App_Start;
+using Clinic.DAL;
 
 namespace Clinic.Controllers.Api
 {
     public class PatientController : ApiController
     {
-        private ApplicationDbContext _dbContext;
+        private PatientRepository _repository { get; set; }
         public PatientController()
         {
-            _dbContext = new ApplicationDbContext();
+            _repository = IocConfig.GetInstance<PatientRepository>();
         }
         public IHttpActionResult GetPatient()
         {
-            return Ok(_dbContext.Patients.ToList().Select(Mapper.Map<Patient, PatientDTO>));
+            return Ok(_repository.GetPatients().Select(Mapper.Map<Patient, PatientDTO>));
         }
 
         public IHttpActionResult GetPatient(int Id)
         {
-            var Patient = _dbContext.Patients.SingleOrDefault(c => c.Id == Id);
-
+            var Patient = _repository.GetPatientById(Id);
+            
             if (Patient == null)
                 return NotFound();
 
@@ -39,9 +41,8 @@ namespace Clinic.Controllers.Api
                 return BadRequest();
 
             var Patient = Mapper.Map<PatientDTO, Patient>(PatientDto);
-            _dbContext.Patients.Add(Patient);
-            _dbContext.SaveChanges();
-            PatientDto.Id = Patient.Id;
+
+            Patient.Id = _repository.CreatePatient(Patient);
 
             return Ok(Patient.Id);
         }
@@ -52,14 +53,14 @@ namespace Clinic.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var PatientInDb = _dbContext.Patients.Single(c => c.Id == PatientDto.Id);
-
+            var PatientInDb = _repository.GetPatientById(PatientDto.Id);
+            
             if (PatientInDb == null)
                 return NotFound();
 
             Mapper.Map<PatientDTO, Patient>(PatientDto, PatientInDb);
 
-            _dbContext.SaveChanges();
+            _repository.UpdatePatient(PatientInDb);
 
             return Ok();
         }
@@ -70,13 +71,12 @@ namespace Clinic.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var PatientInDb = _dbContext.Patients.Single(c => c.Id == Id);
+            var PatientInDb = _repository.GetPatientById(Id);
 
             if (PatientInDb == null)
                 return NotFound();
-
-            _dbContext.Patients.Remove(PatientInDb);
-            _dbContext.SaveChanges();
+            
+            _repository.DeletePatient(Id);
 
             return Ok();
         }

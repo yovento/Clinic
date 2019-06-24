@@ -67,7 +67,7 @@
                             url: "/api/patient/" + button.attr("data-patient-id"),
                             method: "DELETE",
                             success: () => {
-                                bootbox.alert("Patient removed succesfully");
+                                bootbox.alert("Patient deleted succesfully");
                                 button.parents("tr").remove();
                             },
                             error: (error) => {

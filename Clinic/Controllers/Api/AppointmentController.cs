@@ -8,33 +8,41 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Data.Entity;
+using Clinic.App_Start;
+using Autofac;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Clinic.DAL;
 
 namespace Clinic.Controllers.Api
 {
     [RoutePrefix("api/Appointment")]
     public class AppointmentController : ApiController
     {
-        private ApplicationDbContext _dbContext;
+        private AppointmentRepository _repository { get; set; }
+        private AppointmentTypesRepository _repositoryAppoinmentTypes { get; set; }
+
         public AppointmentController()
         {
-            _dbContext = new ApplicationDbContext();
+            _repository = IocConfig.GetInstance<AppointmentRepository>();
+            _repositoryAppoinmentTypes = IocConfig.GetInstance<AppointmentTypesRepository>();
         }
+
         [Route("GetAppointments")]
         public IHttpActionResult GetAppointments(int PatientId)
         {
-            return Ok(_dbContext.Appointments.Include(a => a.AppointmentType).Where(a => a.PatientId == PatientId).ToList().Select(Mapper.Map<Appointment, AppointmentDto>));
+            return Ok(_repository.GetAppointmentsByPacientId(PatientId).Select(Mapper.Map<Appointment, AppointmentDto>));            
         }
 
         [Route("GetAppointmentTypes")]
         public IHttpActionResult GetAppointmentTypes()
         {
-            return Ok(_dbContext.AppointmentTypes.ToList().Select(Mapper.Map<AppointmentTypes, AppointmentTypeDto>));
+            return Ok(_repositoryAppoinmentTypes.GetAppointmentTypes().Select(Mapper.Map<AppointmentTypes, AppointmentTypeDto>));
         }
 
         [Route("GetAppointment")]
         public IHttpActionResult GetAppointment(int Id)
         {
-            var Appointment = _dbContext.Appointments.SingleOrDefault(c => c.Id == Id);
+            var Appointment = _repository.GetAppointmentById(Id);
 
             if (Appointment == null)
                 return NotFound();
@@ -49,9 +57,8 @@ namespace Clinic.Controllers.Api
                 return BadRequest();
 
             var Appointment = Mapper.Map<AppointmentDto, Appointment>(AppointmentDto);
-            _dbContext.Appointments.Add(Appointment);
-            _dbContext.SaveChanges();
-            AppointmentDto.Id = Appointment.Id;
+
+            Appointment.Id = _repository.CreateAppointment(Appointment);
 
             return Ok(Appointment.Id);
         }
@@ -62,14 +69,14 @@ namespace Clinic.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var AppointmentInDb = _dbContext.Appointments.Single(c => c.Id == AppointmentDto.Id);
+            var AppointmentInDb = _repository.GetAppointmentById(AppointmentDto.Id);
 
             if (AppointmentInDb == null)
                 return NotFound();
 
             Mapper.Map<AppointmentDto, Appointment>(AppointmentDto, AppointmentInDb);
 
-            _dbContext.SaveChanges();
+            _repository.UpdateAppointment(AppointmentInDb);
 
             return Ok();
         }
@@ -80,13 +87,12 @@ namespace Clinic.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var AppointmentInDb = _dbContext.Appointments.Single(c => c.Id == Id);
+            var AppointmentInDb = _repository.GetAppointmentById(Id);
 
             if (AppointmentInDb == null)
                 return NotFound();
 
-            _dbContext.Appointments.Remove(AppointmentInDb);
-            _dbContext.SaveChanges();
+            _repository.DeleteAppointment(Id);
 
             return Ok();
         }

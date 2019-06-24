@@ -1,4 +1,6 @@
-﻿using Clinic.Models;
+﻿using Autofac;
+using Clinic.App_Start;
+using Clinic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,11 @@ using System.Web.Mvc;
 namespace Clinic.Controllers
 {
     public class PatientController : Controller
-    {
-        private ApplicationDbContext _dbContext;
+    {   
 
         public PatientController()
         {
-            _dbContext = new ApplicationDbContext();
+            
         }
 
         // GET: Patient

@@ -73,7 +73,7 @@
                             url: "/api/appointment/" + button.attr("data-appointment-id"),
                             method: "DELETE",
                             success: () => {
-                                bootbox.alert("appointment removed succesfully");
+                                bootbox.alert("appointment deleted succesfully");
                                 button.parents("tr").remove();
                             },
                             error: (error) => {

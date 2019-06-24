@@ -15,6 +15,7 @@ namespace Clinic
     {
         protected void Application_Start()
         {
+            IocConfig.Configure();
             Mapper.Initialize(c => c.AddProfile<MappingProfile>());
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
