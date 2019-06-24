@@ -231,6 +231,10 @@
     <Compile Include="Migrations\201906231806008_SeedingAppointmentTypes.Designer.cs">
       <DependentUpon>201906231806008_SeedingAppointmentTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906241805421_SeedUsersAndRoles.cs" />
+    <Compile Include="Migrations\201906241805421_SeedUsersAndRoles.Designer.cs">
+      <DependentUpon>201906241805421_SeedUsersAndRoles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -238,6 +242,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\RolesDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -477,6 +482,8 @@
     <Content Include="Views\Patient\PatientForm.cshtml" />
     <Content Include="Views\Appointment\Index.cshtml" />
     <Content Include="Views\Appointment\AppointmentForm.cshtml" />
+    <Content Include="Views\Patient\ReadOnlyIndex.cshtml" />
+    <Content Include="Views\Appointment\ReadOnlyIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -508,6 +515,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906231806008_SeedingAppointmentTypes.resx">
       <DependentUpon>201906231806008_SeedingAppointmentTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906241805421_SeedUsersAndRoles.resx">
+      <DependentUpon>201906241805421_SeedUsersAndRoles.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

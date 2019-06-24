@@ -1,0 +1,50 @@
+﻿
+
+@{
+    ViewBag.Title = "Patients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Patients</h2>
+<table id="patients" class="table table-­‐bordered table-­‐hover">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Appointments</th>
+        </tr>
+    </thead>
+</table>
+
+
+@section scripts {
+    <script>
+        $(document).ready(() => {
+            var table = $("#patients").DataTable({
+                ajax: {
+                    url: "/api/patient",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "Name"
+                    },
+                    {
+                        data: "Email"
+                    },
+                    {
+                        data: "Phone"
+                    },
+                    {
+                        data: "Appointments",
+                        render: function (data, type, patient) {
+                            return "<a href='/appointment/index/" + patient.Id + "'>Appointments</a>";
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}
+

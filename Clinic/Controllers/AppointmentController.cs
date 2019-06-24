@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Clinic.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,9 +18,17 @@ namespace Clinic.Controllers
         // GET: Appointment
         public ActionResult Index(int Id)
         {
-            return View(Id);
+            if (User.IsInRole(RolesDefinition.CanManageClinicRole))
+            {
+                return View(Id);
+            }
+            else
+            {
+                return View("ReadOnlyIndex", Id);
+            }
         }
 
+        [Authorize(Roles = RolesDefinition.CanManageClinicRole)]
         public ActionResult New(int Id)
         {
             Ids.Add("PatientId", Id);
@@ -27,6 +36,7 @@ namespace Clinic.Controllers
 return View("AppointmentForm", Ids);
         }
 
+        [Authorize(Roles = RolesDefinition.CanManageClinicRole)]
         public ActionResult Edit(int Id)
         {
             Ids.Add("PatientId", 0);

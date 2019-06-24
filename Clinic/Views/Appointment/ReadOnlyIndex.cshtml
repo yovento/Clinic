@@ -1,0 +1,60 @@
+﻿@model int
+@{
+    ViewBag.Title = "Appointments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 id="title"></h2>
+<table id="appointments" class="table table-­‐bordered table-­‐hover">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Date</th>            
+            <th>Status</th>
+        </tr>
+    </thead>
+</table>
+
+
+@section scripts {
+    <script>
+        let patientId = @Model;
+        $(document).ready(() => {
+            $.ajax({
+                url: "/api/patient/" + patientId,
+                method: "get"
+            }).done((data) => {
+                $('#title').html('Appointments for ' + data.Name);
+            });
+
+            var table = $("#appointments").DataTable({
+                ajax: {
+                    url: "/api/appointment/GetAppointments?PatientId=" + patientId,
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "Type",
+                        render: function (data, type, appointment) {
+                            return appointment.AppointmentType.Name;
+                        }
+                    },
+                    {
+                        data: "AppointmentDate",
+                        render: function (data, type, appointment) {
+                            return ('' + appointment.AppointmentDate).replace('T',' ');
+                        }
+                    },
+                    {
+                        data: "IsActiveAppointment",
+                        render: function (data, type, appointment) {
+                            return appointment.IsActiveAppointment == true ? 'Active' : 'Cancelled';
+                        }
+                    }
+                ]
+            });
+            
+        });
+    </script>
+}
+

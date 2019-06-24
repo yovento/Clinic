@@ -18,15 +18,24 @@ namespace Clinic.Controllers
 
         // GET: Patient
         public ActionResult Index()
-        {            
-            return View();
+        {
+            if (User.IsInRole(RolesDefinition.CanManageClinicRole))
+            {
+                return View();
+            }
+            else
+            {
+                return View("ReadOnlyIndex");
+            }            
         }
 
+        [Authorize(Roles = RolesDefinition.CanManageClinicRole)]
         public ActionResult New()
         {
             return View("PatientForm", 0);
         }
 
+        [Authorize(Roles = RolesDefinition.CanManageClinicRole)]
         public ActionResult Edit(int Id)
         {
             return View("PatientForm", Id);
