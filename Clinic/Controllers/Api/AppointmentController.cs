@@ -62,7 +62,7 @@ namespace Clinic.Controllers.Api
 
             var Appointment = Mapper.Map<AppointmentDto, Appointment>(AppointmentDto);
 
-            var AppointmentNoCreationReason = _appointmentBL.AppointmentCanBeCreated(Appointment);
+            var AppointmentNoCreationReason = _appointmentBL.AppointmentCanBeCreated(Appointment, _repository);
 
             if (AppointmentNoCreationReason != "")
                 return BadRequest(AppointmentNoCreationReason);
