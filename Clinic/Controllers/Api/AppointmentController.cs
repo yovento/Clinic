@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Clinic.DTO;
-using Clinic.Models;
+using Clinic.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,26 +11,30 @@ using System.Data.Entity;
 using Clinic.App_Start;
 using Autofac;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Clinic.DAL;
+using Clinic.Repositories;
+using Clinic.BusinessLogic.Appointment;
 
 namespace Clinic.Controllers.Api
 {
     [RoutePrefix("api/Appointment")]
     public class AppointmentController : ApiController
     {
-        private AppointmentRepository _repository { get; set; }
-        private AppointmentTypesRepository _repositoryAppoinmentTypes { get; set; }
+        private IAppointmentRepository _repository { get; set; }
+        private IAppointmentTypesRepository _repositoryAppoinmentTypes { get; set; }
+        private AppointmentBL _appointmentBL { get; set; }
 
         public AppointmentController()
         {
             _repository = IocConfig.GetInstance<AppointmentRepository>();
+            _appointmentBL = IocConfig.GetInstance<AppointmentBL>();
             _repositoryAppoinmentTypes = IocConfig.GetInstance<AppointmentTypesRepository>();
+
         }
 
         [Route("GetAppointments")]
         public IHttpActionResult GetAppointments(int PatientId)
         {
-            return Ok(_repository.GetAppointmentsByPacientId(PatientId).Select(Mapper.Map<Appointment, AppointmentDto>));            
+            return Ok(_repository.GetAppointmentsByPacientId(PatientId).Select(Mapper.Map<Appointment, AppointmentDto>));
         }
 
         [Route("GetAppointmentTypes")]
@@ -57,6 +61,11 @@ namespace Clinic.Controllers.Api
                 return BadRequest();
 
             var Appointment = Mapper.Map<AppointmentDto, Appointment>(AppointmentDto);
+
+            var AppointmentNoCreationReason = _appointmentBL.AppointmentCanBeCreated(Appointment);
+
+            if (AppointmentNoCreationReason != "")
+                return BadRequest(AppointmentNoCreationReason);
 
             Appointment.Id = _repository.CreateAppointment(Appointment);
 
@@ -91,6 +100,11 @@ namespace Clinic.Controllers.Api
 
             if (AppointmentInDb == null)
                 return NotFound();
+
+            var AppointmentNoCancellationReason = _appointmentBL.AppointmentCanBeCancelled(AppointmentInDb);
+
+            if (AppointmentNoCancellationReason != "")
+                return BadRequest(AppointmentNoCancellationReason);
 
             _repository.DeleteAppointment(Id);
 

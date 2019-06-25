@@ -4,14 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Linq.Expressions;
 using System.Data.Entity;
-using Clinic.Models;
-using Clinic.App_Start;
+using Clinic.Domain;
+using Clinic.Repositories;
 
-namespace Clinic.DAL
+namespace Clinic.Repositories
 {
     public class BaseRepository<T> where T : class
     {
-        protected DbContext _context = IocConfig.GetInstance<ApplicationDbContext>();
+        protected DbContext _context = new Context();
         protected DbSet<T> DbSet;
 
         public BaseRepository()

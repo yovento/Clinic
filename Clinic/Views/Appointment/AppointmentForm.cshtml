@@ -20,7 +20,7 @@
         <input id="date" type="datetime-local" required value="" class="form-control" />
     </div>
 
-    <div class="form-check">
+    <div class="form-check hidden">
         <input class="form-check-input" type="checkbox" id="active" checked="checked">
         <label class="form-check-label" for="active">
             Is Active?
@@ -35,8 +35,8 @@
     <script>
         $(document).ready(() => {
             appointmentForm.configureUI();
-            appointmentForm.services.getAppointmentTypes();
-            appointmentForm.formLogic.getAppointment();
+            appointmentForm.formLogic.getAppointmentTypes();
+            
         });
 
         let appointmentForm = {
@@ -64,6 +64,16 @@
                     appointmentForm.global.appointment.IsActiveAppointment = $("#active").is(":checked");
 
                 },
+                getAppointmentTypes: () => {
+                    appointmentForm.services.getAppointmentTypes().done((appointmentTypes) => {
+                        $.each(appointmentTypes, function (key, appointmentType) {
+                            $("#type").append($("<option></option>").val
+                                (appointmentType.Id).html(appointmentType.Name));
+                        });
+                        appointmentForm.formLogic.getAppointment();
+                    });
+
+                },
                 getAppointment: () => {
                     if (appointmentForm.global.appointmentId !== 0) {
                         appointmentForm.services.getAppointment();
@@ -84,14 +94,9 @@
                         });
                 },
                 getAppointmentTypes: () => {
-                    $.ajax({
+                    return $.ajax({
                         url: "/api/appointment/GetAppointmentTypes",
                         method: "get"
-                    }).done((appointmentTypes) => {
-                        $.each(appointmentTypes, function (key, appointmentType) {
-                            $("#type").append($("<option></option>").val
-                                (appointmentType.Id).html(appointmentType.Name));
-                        });
                     });
                 },
                 saveAppointment: () => {
@@ -102,9 +107,12 @@
                         }).done((data) => {
                             appointmentForm.global.appointmentId = data;
                             bootbox.alert("Appointment saved succesfully.");
-                            }).fail((data) => {
-                                console.log(data);
-                                bootbox.alert("Something went wrong.");
+                            }).error((error) => {
+                                console.log(error);
+                                if (error.responseJSON.Message)
+                                    bootbox.alert(error.responseJSON.Message);
+                                else
+                                    bootbox.alert("Something went wrong.");
                             });
                 }
             }

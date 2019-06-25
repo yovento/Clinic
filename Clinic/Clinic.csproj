@@ -219,13 +219,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
-    <Compile Include="DAL\AppointmentTypes\AppointmentTypesRepository.cs" />
-    <Compile Include="DAL\AppointmentTypes\IAppointmentTypesRepository.cs" />
-    <Compile Include="DAL\BaseRepository.cs" />
-    <Compile Include="DAL\Appointment\IAppointmentRepository.cs" />
-    <Compile Include="DAL\Patient\IPatientRepository.cs" />
-    <Compile Include="DAL\Appointment\AppointmentRepository.cs" />
-    <Compile Include="DAL\Patient\PatientRepository.cs" />
     <Compile Include="DTO\AppointmentDto.cs" />
     <Compile Include="DTO\AppointmentTypeDto.cs" />
     <Compile Include="DTO\PatientDto.cs" />
@@ -254,11 +247,8 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Appointment.cs" />
-    <Compile Include="Models\AppointmentTypes.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\RolesDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -536,6 +526,20 @@
     <EmbeddedResource Include="Migrations\201906241805421_SeedUsersAndRoles.resx">
       <DependentUpon>201906241805421_SeedUsersAndRoles.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Clinic.BusinnesLogic\Clinic.BusinessLogic.csproj">
+      <Project>{b0015171-116c-46cb-a85b-9ad9f442b5e0}</Project>
+      <Name>Clinic.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Clinic.Domain\Clinic.Domain.csproj">
+      <Project>{caa26a10-3190-4546-8700-8ba47b899eb4}</Project>
+      <Name>Clinic.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Clinic.Repositories\Clinic.Repositories.csproj">
+      <Project>{5fbe5414-032f-4271-9e0b-1dd7b6d6ae82}</Project>
+      <Name>Clinic.Repositories</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

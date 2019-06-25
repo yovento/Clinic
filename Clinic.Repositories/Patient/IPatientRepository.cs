@@ -1,12 +1,12 @@
-﻿using Clinic.Models;
+﻿using Clinic.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Clinic.DAL
+namespace Clinic.Repositories
 {
-    public interface IPatientRepository
+    public interface IPatientRepository : IDisposable
     {
         IEnumerable<Patient> GetPatients();
 

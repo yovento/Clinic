@@ -5,16 +5,16 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Clinic.DTO;
-using Clinic.Models;
+using Clinic.Domain;
 using AutoMapper;
 using Clinic.App_Start;
-using Clinic.DAL;
+using Clinic.Repositories;
 
 namespace Clinic.Controllers.Api
 {
     public class PatientController : ApiController
     {
-        private PatientRepository _repository { get; set; }
+        private IPatientRepository _repository { get; set; }
         public PatientController()
         {
             _repository = IocConfig.GetInstance<PatientRepository>();

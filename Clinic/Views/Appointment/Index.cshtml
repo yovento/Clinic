@@ -78,6 +78,10 @@
                             },
                             error: (error) => {
                                 console.log(error);
+                                if (error.responseJSON.Message)
+                                    bootbox.alert(error.responseJSON.Message);
+                                else
+                                    bootbox.alert("Something went wrong.");
                             }
                         });
                     }

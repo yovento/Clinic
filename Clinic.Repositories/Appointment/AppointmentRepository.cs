@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using Clinic.DTO;
-using Clinic.Models;
+using Clinic.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 
-namespace Clinic.DAL
+namespace Clinic.Repositories
 {
     public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRepository
     {
@@ -52,6 +50,24 @@ namespace Clinic.DAL
             Mapper.Map(appointment, AppointmentInDb);
 
             SaveChanges();
+        }
+
+        private bool disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Clinic.Models
+namespace Clinic.Domain
 {
     public class Appointment
     {
+        public static int HoursToCancelation = 24;
         public int Id { get; set; }
         public Patient Patient { get; set; }
 
@@ -24,5 +25,14 @@ namespace Clinic.Models
         [Required]
         public bool IsActiveAppointment { get; set; }
 
+        
+
+        public bool CanBeCreated(Appointment appointment)
+        {
+            if ((appointment.AppointmentDate - DateTime.Now).TotalHours < Appointment.HoursToCancelation)
+                return false;
+
+            return true;
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Clinic.Models
+namespace Clinic.Domain
 {
     public class Patient
     {

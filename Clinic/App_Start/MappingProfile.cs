@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Clinic.DTO;
 using Clinic.Models;
+using Clinic.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
