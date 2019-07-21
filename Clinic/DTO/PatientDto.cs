@@ -5,6 +5,7 @@ using System.Web;
 
 namespace Clinic.DTO
 {
+    /*Patient DTO definition*/
     public class PatientDTO
     {
         public int Id { get; set; }
