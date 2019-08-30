@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,6 +23,10 @@ namespace Clinic.Domain
 
         [Required]
         public bool IsActiveAppointment { get; set; }
+
+public bool IsDefinitiveDone { get; set;}
+
+
         
     }
 }
