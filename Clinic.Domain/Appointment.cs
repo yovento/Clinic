@@ -24,9 +24,5 @@ namespace Clinic.Domain
         [Required]
         public bool IsActiveAppointment { get; set; }
 
-public bool IsDefinitiveDone { get; set;}
-
-
-        
     }
 }
